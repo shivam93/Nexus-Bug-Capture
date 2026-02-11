@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════
+   NEXUS COMMAND CENTER — Design System CSS
+
+   All CSS custom properties are sourced from .env via
+   Vite's import.meta.env, but we define them statically
+   here so Tailwind can resolve them at build time.
+
+   To create a new screen, simply use these variables:
+     bg-[var(--nx-canvas)]   for page backgrounds
+     bg-[var(--nx-surface)]  for card/panel surfaces
+     text-[var(--nx-cyan)]   for accent text
+   ══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Canvas & Surfaces ─────────────────────────── */
+  --nx-canvas: #020617;
+  /* Deepest Slate/Black */
+  --nx-surface: #0F172A;
+  /* Slate 900 */
+  --nx-surface-hover: #1E293B;
+  /* Slate 800 */
+  --nx-terminal-bg: #020617;
+
+  /* ── Accent Palette ────────────────────────────── */
+  --nx-cyan: #00D9FF;
+  --nx-success: #00FF9D;
+  --nx-danger: #FF4444;
+  --nx-amber: #F59E0B;
+
+  /* ── Text Hierarchy ────────────────────────────── */
+  --nx-text-primary: #E2E8F0;
+  --nx-text-secondary: #64748B;
+  --nx-text-muted: #475569;
+
+  /* ── Borders & Glows ───────────────────────────── */
+  --nx-border: #1E293B;
+  /* Slate 800 */
+  --nx-border-glow: #00D9FF33;
+
+  /* ── Radius Scale ──────────────────────────────── */
+  --nx-radius-sm: 4px;
+  --nx-radius-md: 8px;
+  --nx-radius-lg: 12px;
+
+  /* ── Shadows ───────────────────────────────────── */
+  --nx-shadow-card: 0 4px 24px rgba(0, 217, 255, 0.03);
+  --nx-shadow-glow-success: 0 0 20px rgba(0, 255, 157, 0.06);
+  --nx-shadow-glow-danger: 0 0 20px rgba(255, 68, 68, 0.08);
+  --nx-shadow-glow-warning: 0 2px 20px rgba(245, 158, 11, 0.08);
+}
+
+@layer base {
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  /* ── Font Families ───────────────────────────────
+     Use as Tailwind classes: className="font-ui"
+     or className="font-mono-nx"                    */
+  .font-ui {
+    font-family: "Inter Tight", "Inter", system-ui, sans-serif;
+  }
+
+  .font-mono-nx {
+    font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   Animations — Reusable across all screens
+   ══════════════════════════════════════════════════════ */
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(0, 255, 157, 0.4);
+  }
+}
+
+@keyframes progress-creep {
+  0% {
+    width: 45%;
+  }
+
+  50% {
+    width: 60%;
+  }
+
+  100% {
+    width: 45%;
+  }
+}
+
+@layer utilities {
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out both;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.3s ease-out both;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  .animate-progress-creep {
+    animation: progress-creep 5s ease-in-out infinite;
+  }
+
+  /* Engineering grid background pattern */
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Gradient text utility */
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, var(--nx-cyan), var(--nx-success));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}

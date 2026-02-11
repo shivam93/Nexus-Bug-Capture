@@ -15,6 +15,7 @@ import type {
   AgentAnalysis,
   VerificationLoop,
   RelatedBug,
+  SimulationHotspot,
 } from '../types'
 
 // ─── Fleet Metrics ──────────────────────────────────────────
@@ -276,5 +277,51 @@ export const logEntries: LogEntry[] = [
     agentId: 'CAPTURE-09',
     message: 'Starting session: Checkout Regression',
     severity: 'info',
+  },
+]
+
+// ─── Browser Simulation Hotspots ───────────────────────────
+export const simulationHotspots: SimulationHotspot[] = [
+  {
+    id: 'hs-1',
+    label: 'Navigated to Men Category',
+    type: 'navigation',
+    selector: 'nav.men-link',
+    position: { top: '32px', left: '420px', width: '60px', height: '30px' },
+  },
+  {
+    id: 'hs-2',
+    label: 'Selected Product: Linen Shirt',
+    type: 'click',
+    selector: 'div.product-card[data-id="linen-shirt"]',
+    position: { top: '480px', left: '80px', width: '240px', height: '320px' },
+  },
+  {
+    id: 'hs-3',
+    label: 'Selected Product: Cargo Pants',
+    type: 'click',
+    selector: 'div.product-card[data-id="cargo-pants"]',
+    position: { top: '480px', left: '360px', width: '240px', height: '320px' },
+  },
+  {
+    id: 'hs-4',
+    label: 'Focused Promo Input',
+    type: 'input',
+    selector: 'input#promo-code',
+    position: { top: '300px', left: '800px', width: '200px', height: '40px' },
+  },
+  {
+    id: 'hs-5',
+    label: 'Clicked Apply Promo',
+    type: 'click',
+    selector: 'button#apply-promo',
+    position: { top: '300px', left: '1010px', width: '80px', height: '40px' },
+  },
+  {
+    id: 'hs-bug',
+    label: 'Bug: Layout Shift',
+    type: 'click',
+    selector: 'div.hero-banner',
+    position: { top: '80px', left: '200px', width: '800px', height: '100px' }, // Hero area
   },
 ]

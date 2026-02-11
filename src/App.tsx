@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { CommandCenter, ProjectTacticalView, BugDetailView } from './components/dashboard'
+import { CommandCenter, ProjectTacticalView, BugDetailView, BrowserSimulationView } from './components/dashboard'
 import { GlobalHeader } from './components/layout'
 
-type View = 'command-center' | 'tactical' | 'bug-detail'
+type View = 'command-center' | 'tactical' | 'bug-detail' | 'browser-simulation'
 
 export default function App() {
   const [view, setView] = useState<View>('command-center')
@@ -16,17 +16,11 @@ export default function App() {
       case 'command-center':
         return [{ label: 'Command Center', active: true }]
       case 'tactical':
-        return [home, { label: 'Sprint Q1', active: true }] // Plan says "Sprint Q1" or "Nykaa Fashion"? 
-      // User request: "State 2: Home / Nykaa Fashion / Sprint Q1". 
-      // Let's do: Home / Nykaa Fashion (active) or contextually correct.
-      // Actually, let's follow the user's specific example: "Home / Nykaa Fashion / Sprint Q1"
-      // But let's verify visual space.
-      // Let's stick to a simpler 2-level for functionality or 3-level if needed.
-      // User said: "Center: Dynamic Breadcrumbs... State 2: Home / Nykaa Fashion / Sprint Q1"
-      // Okay, I'll add that.
-      // return [home, { label: 'Nykaa Fashion', active: false }, { label: 'Sprint Q1', active: true }]
+        return [home, { label: 'Nykaa Fashion' }, { label: 'Sprint Q1', active: true }]
       case 'bug-detail':
         return [home, project, { label: 'Bug #402', active: true }]
+      case 'browser-simulation':
+        return [home, { label: 'Plugin Simulator', active: true }]
     }
   }
 
@@ -43,7 +37,10 @@ export default function App() {
       <main className="flex-1 flex flex-col min-h-0 relative">
         {view === 'command-center' && (
           <div className="flex-1 overflow-y-auto">
-            <CommandCenter onEnterProject={() => setView('tactical')} />
+            <CommandCenter
+              onEnterProject={() => setView('tactical')}
+              onEnterSimulation={() => setView('browser-simulation')}
+            />
           </div>
         )}
 
@@ -58,6 +55,12 @@ export default function App() {
           <BugDetailView
             onBack={() => setView('command-center')}
             onBackToTactical={() => setView('tactical')}
+          />
+        )}
+
+        {view === 'browser-simulation' && (
+          <BrowserSimulationView
+            onSaveBug={() => setView('bug-detail')}
           />
         )}
       </main>

@@ -50,7 +50,8 @@ src/
 │   └── dashboard/                 ← Page compositions
 │       ├── CommandCenter.tsx       ← Screen 1: Fleet overview
 │       ├── ProjectTacticalView.tsx ← Screen 2: Project war room
-│       └── BugDetailView.tsx      ← Screen 3: Bug deep-dive
+│       ├── BugDetailView.tsx      ← Screen 3: Bug deep-dive
+│       └── BrowserSimulationView.tsx ← Screen 4: Plugin Simulator
 ```
 
 Every folder has an `index.ts` barrel export. Import from folders, not files:
@@ -167,6 +168,10 @@ All domain types in `src/types/index.ts`:
 - `VerificationLoop` — Verification status (pending/running/passed/failed)
 - `RelatedBug` — Linked bug with severity color
 
+### Screen 4 (Browser Simulation)
+- `SimulationHotspot` — Interactive zone on the mock website
+- `RecordedEvent` — Captured user interaction (click/input/nav)
+
 ## Data Layer
 
 Currently static (`src/data/mock-data.ts`). Exports:
@@ -192,6 +197,9 @@ Currently static (`src/data/mock-data.ts`). Exports:
 - `agentAnalysis` — Capture-01, 94% confidence, JS error + NULL input analysis
 - `verificationLoop` — Pending next commit status
 - `relatedBugs` — 3 bugs (BUG-409 danger, BUG-398 amber, BUG-399 success)
+
+### Screen 4 data
+- `simulationHotspots` — 3 interactive zones (Navigation, Product Click, Add to Cart) for the "Nykaa Fashion" mock.
 
 **To connect to a real API**: Replace mock imports with fetch/SWR/React Query calls. The `.env` has placeholder `VITE_API_BASE_URL` and `VITE_WS_URL` ready.
 
@@ -321,6 +329,43 @@ The Pencil (.pen) design lives in the repo's `designs/` folder (managed via Penc
 
 ## Changelog
 
+### [2026-02-11] Browser Simulation UX Refinements (v5)
+- **Issue Resolution**: Fixed 6 critical UX issues identified in user testing.
+- **Hotspot Visibility Enhancement**:
+    - Made hotspots **immediately visible** when recording starts (no longer hidden until hover).
+    - Added pulsing cyan borders (`border-[var(--nx-cyan)]/40`) and visible badges to all unclicked hotspots.
+    - Added `animate-pulse` effect for active, clickable areas.
+    - Visual states: Idle (invisible) → Recording (cyan border + badge) → Clicked (green border + "✓ RECORDED").
+- **Recording Flow Redesign**:
+    - **Removed** full-sidebar "Bug Capture" mode entirely.
+    - Sidebar now **always displays the step list**, allowing natural sequential recording.
+    - Users can record multiple steps, then annotate specific ones (no forced interruption).
+- **Step-Level Bug Annotations**:
+    - Implemented expandable detail view for each recorded step.
+    - Click any step card to expand and see: Selector, Timestamp, "Flag as Bug" checkbox, Comment textarea.
+    - Visual indicators: Red triangle icon (bug flagged), Cyan chat bubble (has comment).
+    - Extended `RecordedEvent` type with `isFlaggedAsBug?: boolean` and `comment?: string`.
+- **Recording Timer (Dual Placement)**:
+    - **Header Badge**: `[● REC 00:24]` with pulsing red dot, displayed next to "Nexus Agent" during recording.
+    - **Step List Header**: Secondary timer display in "RECORDED STEPS" section.
+    - Always visible regardless of scroll position.
+- **Retry/Reset Button**:
+    - Added "RETRY" button to sidebar header (top-right, visible when `!isRecording && events.length > 0`).
+    - Ghost button style with cyan hover, refresh icon.
+    - Also available as "Clear All" text button in bottom actions.
+- **Button Color Consistency**:
+    - Changed "SAVE BUG CONTEXT" button from red (`var(--nx-danger)`) to **Cyan** (`var(--nx-cyan)`).
+    - Design system compliance: Cyan for primary actions, Red only for errors/stop actions.
+    - Button hierarchy: "STOP RECORDING" (red outline) → "SAVE SESSION" (cyan solid) → "Clear All" (muted text).
+- **Component Changes**:
+    - `types/index.ts`: Extended `RecordedEvent` with annotation fields.
+    - `useSimulationSequence.ts`: Added `updateEvent()` function for modifying recorded events.
+    - `WebsiteMock.tsx`: Added `group` class, immediate badge visibility, pulsing borders.
+    - `PluginSidebar.tsx`: Complete refactor (removed bug capture mode, added timer badge, step detail view, annotations UI).
+    - `BrowserSimulationView.tsx`: Passed `onReset` and `onUpdateEvent` props to sidebar.
+- **New Props**: `PluginSidebar` now requires `onReset` and `onUpdateEvent` callbacks.
+- **Testing Scenarios**: All 4 test scenarios validated (basic recording, step annotations, save/retry, color consistency).
+
 ### [2026-02-11] Screen 3: Bug Detail View (Agentic Bug Capture)
 - **New Screen**: `BugDetailView.tsx` — "Agentic Bug Capture" deep-dive for individual bugs.
 - **3-Column Layout**: Fixed sidebars (280px + 320px) with flex-1 center evidence stage.
@@ -354,3 +399,18 @@ The Pencil (.pen) design lives in the repo's `designs/` folder (managed via Penc
         - **Split Screen**: Implemented interactive `SessionReplay` (scrubbable timeline) and `TechnicalContext` (Console).
         - **Verification**: Added "Verify Fix" button simulation (Pending -> Running -> Passed).
 - **Data Simulation**: Updated `mock-data.ts` to tell the comprehensive "Agent-09" story (Active -> Running Regression -> Found Bug #402).
+
+### [2026-02-11] Screen 4: Browser Simulation (Nexus Plugin)
+- **New Screen**: `BrowserSimulationView.tsx` — Simulates the "Zero-Friction Capture" workflow.
+- **Components**:
+    - `BrowserShell`: Chrome-like window frame.
+    - `WebsiteMock`: Interactive "Nykaa Fashion" mock with data-driven hotspots.
+    - `PluginSidebar`: The Nexus extension overlay with recording controls and event list.
+- **Interactions**:
+    - **Recording**: Toggle start/stop to capture events.
+    - **Hotspots**: Pulsing interactive elements that register events when clicked.
+    - **Timer**: Real-time duration tracking (`mm:ss`).
+    - **Save Flow**: "Save Bug Context" transitions to Screen 3 (Bug Detail).
+- **Architecture**:
+    - **Hook**: `useSimulationSequence` manages recording state and event log.
+    - **Entry Point**: New "Try Nexus Plugin" CTA on Command Center.

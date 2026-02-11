@@ -6,6 +6,28 @@ export type AgentStatus = 'active' | 'idle' | 'error'
 export type ProjectHealth = 'healthy' | 'attention' | 'critical'
 export type LogSeverity = 'info' | 'warning' | 'error' | 'success'
 
+export type View = 'command-center' | 'tactical' | 'bug-detail' | 'browser-simulation'
+
+export interface RecordedEvent {
+  id: string
+  type: 'click' | 'navigation' | 'input'
+  description: string
+  timestamp: number
+  selector?: string
+
+  // Step-level annotations for bug tracking
+  isFlaggedAsBug?: boolean
+  comment?: string
+}
+
+export interface SimulationHotspot {
+  id: string
+  label: string
+  type: 'click' | 'navigation' | 'input'
+  selector: string
+  position: { top: string; left: string; width: string; height: string }
+}
+
 export interface Agent {
   id: string
   name: string

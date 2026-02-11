@@ -31,6 +31,14 @@ A "Glass Cockpit" dashboard for supervising a fleet of AI testing agents. Monito
 ### 3. Agentic Bug Detail
 A deep-dive view for individual bugs where human-readable video and machine-readable code (console logs, network requests) live side-by-side.
 
+### 4. Browser Simulation (Plugin)
+A simulated browser environment demonstrating the "Zero-Friction Capture" workflow with:
+- **Immediate Hotspot Visibility**: Interactive elements light up with pulsing cyan borders when recording starts
+- **Step-Level Bug Annotations**: Click any recorded step to expand details, flag as bug, or add comments
+- **Recording Timer**: Dual placement (header badge + step list) for at-a-glance status
+- **Natural Workflow**: Record all steps first, then annotate specific ones—no forced interruptions
+- **Smart Reset**: "Retry" button in header for quick session restart
+
 ## Tech Stack
 
 -   **Framework**: React 19.2

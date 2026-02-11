@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react'
-import { SectionLabel, GlowButton } from '../ui'
+import { SectionLabel, GlowButton, GlassCard } from '../ui'
 import { FleetStatusCard, DefectVelocityCard, ROICard } from '../sectors/HUD'
 import { ProjectCard } from '../sectors/MissionControl'
 import { IntelFeed } from '../sectors/LiveFeed'
@@ -15,20 +15,39 @@ import {
 
 interface CommandCenterProps {
   onEnterProject?: () => void
+  onEnterSimulation?: () => void
 }
 
-export function CommandCenter({ onEnterProject }: CommandCenterProps) {
+export function CommandCenter({ onEnterProject, onEnterSimulation }: CommandCenterProps) {
   return (
     <div className="flex flex-col gap-8 px-10 py-8 min-h-full">
       {/* ── Greeting ──────────────────────────────── */}
-      <section className="flex flex-col gap-1.5">
-        <h1 className="font-ui text-[32px] font-bold tracking-tight text-[var(--nx-text-primary)]">
-          Good morning, Sarah
-        </h1>
-        <p className="font-ui text-sm text-[var(--nx-text-secondary)]">
-          Your fleet of 15 agents saved you 12 hours of manual testing yesterday.
-        </p>
-      </section>
+      <div className="flex items-start justify-between">
+        <section className="flex flex-col gap-1.5">
+          <h1 className="font-ui text-[32px] font-bold tracking-tight text-[var(--nx-text-primary)]">
+            Good morning, Sarah
+          </h1>
+          <p className="font-ui text-sm text-[var(--nx-text-secondary)]">
+            Your fleet of 15 agents saved you 12 hours of manual testing yesterday.
+          </p>
+        </section>
+
+        {/* New Plugin CTA */}
+        <div
+          onClick={onEnterSimulation}
+          className="group cursor-pointer"
+        >
+          <GlassCard className="flex items-center gap-4 px-5 py-3 border border-[var(--nx-cyan)]/20 hover:border-[var(--nx-cyan)] hover:shadow-[0_0_20px_rgba(0,217,255,0.15)] transition-all bg-[var(--nx-surface)]">
+            <div className="w-10 h-10 rounded-full bg-[var(--nx-cyan)]/10 flex items-center justify-center group-hover:bg-[var(--nx-cyan)]/20 transition-colors">
+              <Plus className="w-5 h-5 text-[var(--nx-cyan)]" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-[var(--nx-text-primary)] group-hover:text-[var(--nx-cyan)] transition-colors">Try Nexus Plugin</span>
+              <span className="text-[10px] text-[var(--nx-text-secondary)]">Launch Browser Simulator</span>
+            </div>
+          </GlassCard>
+        </div>
+      </div>
 
       {/* ── Sector A: Heads-Up Display ────────────── */}
       <section className="flex gap-4">

@@ -174,3 +174,25 @@
     background-clip: text;
   }
 }
+
+/* Hotspot Animation */
+@keyframes hotspot-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.4);
+    background-color: rgba(0, 217, 255, 0.1);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 217, 255, 0);
+    background-color: rgba(0, 217, 255, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 217, 255, 0);
+    background-color: rgba(0, 217, 255, 0.1);
+  }
+}
+
+.animate-hotspot-pulse {
+  animation: hotspot-pulse 2s infinite;
+}
